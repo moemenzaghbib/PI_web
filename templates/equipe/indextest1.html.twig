@@ -1,0 +1,194 @@
+{% extends 'Backbase.html.twig' %}
+{% block body %}
+    {# <h1>Equipe index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdEquipe</th>
+                <th>NumEquipe</th>
+                <th>NbreEmp</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equipe in equipes %}
+            <tr>
+                <td>{{ equipe.idEquipe }}</td>
+                <td>{{ equipe.numEquipe }}</td>
+                <td>{{ equipe.nbreEmp }}</td>
+                <td>
+                    <a href="{{ path('app_equipe_show', {'idEquipe': equipe.idEquipe}) }}">show</a>
+                    <a href="{{ path('app_equipe_edit', {'idEquipe': equipe.idEquipe}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_equipe_new') }}">Create new</a> #}
+
+    <div class="card" style="margin-top: 50px">
+        <div class="card-body" style="width: 999px;position: center;align-self: center">
+            <h1 class="card-title" style="margin-left: 150px;margin-top: 30px">List des Equipes</h1>
+
+            <div>
+                <input style="margin-left: 150px" type="text" id="search" class="form-control" placeholder="Search par Numero">
+                <a style="margin-left: 150px" class="tg-btn" href="" id="idup">Numero (UP) ⬆️</a>
+                <a class="tg-btn" href="" id="iddown">Numero (DOWN) ⬇️</a>
+
+            </div>
+            {% for message in app.flashes('info') %}
+                <div style="margin-left: 150px" class="alert alert-success">{{ message }}</div>
+            {% endfor %}
+            <table class="table" style="margin-left: 150px" id="t">
+                <thead>
+                <tr>
+                    <th scope="col">Numero Equipe</th>
+                    <th scope="col">Nombre d'employees Equipe</th>
+                    <th scope="col">Nom Service Equipe</th>
+                </tr>
+                </thead>
+                <tbody id="all">
+                {% for equipe in equipes %}
+                    <tr>
+                        <td>{{ equipe.numEquipe }}</td>
+                        <td>{{ equipe.nbreEmp }}</td>
+                        <td>{{ equipe.service }}</td>
+                        <td>
+                            <a href="{{ path('app_equipe_show', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-dark">show</a>
+                            <a href="{{ path('app_equipe_edit', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-outline-primary">edit</a>
+                            <a href="{{ path('app_service_equipe_edit', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-outline-primary">Affecter Au Service</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+                </tbody>
+                <tbody id="search">
+                </tbody>
+            </table>
+            </table>
+            <!-- End Default Table Example -->
+
+        </div><a style="margin-left: 850px;margin-bottom: 30px" href="{{ path('app_equipe_new') }}"><button type="submit" class="btn btn-primary">Create new</button></a>
+
+    </div>
+    {{ knp_pagination_render(equipes) }}
+
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>  //var value = $(this).val();
+        $( document ).ready(function() {
+            $("#search").keyup(function(e){
+                var value = $(this).val();
+               //var value = document.getElementById("search").value;
+                $.ajax({
+                    url : "{{ path('recherche_par_nom_taha') }}",
+                    method: "GET",
+                    data: {
+                        searchValue: value,
+                    },
+                    success: function (data) {
+                        if(data){
+                            $('#t tbody#search').empty();
+                            for (i = 0; i < data.length; i++) {
+
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('' +
+                                    '<tr><td> '+data[i].numEquipe+'</td>' +
+                                    '<td> '+data[i].nbreEmp+' </td>' +
+                                    '<td>'+data[i].service+' </td>' +
+                                    '<td>' +
+                                    '<a class="btn btn-dark" href="Equipe/'+data[i].idEquipe+'">show </a>' +
+                                    '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/edit">edit </a>' +
+                                    '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/AffecterService">Affecter Au Service</a>' +
+                                    '</td></tr>');
+                            }
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+            });
+        });
+        $("#idup").click(function(e) {
+            var value3 ="ASC";
+            $.ajax({
+                url :  "{{ path('UPtriEQUIPE') }}",
+                type : 'GET',
+                data: {
+
+                    'order': value3
+                     },
+                success : function(data){
+                    $('#t tbody#search').empty();
+
+                        for (i = 0; i < data.length; i++) {
+
+                        $('#t tbody#all').hide();
+                        $('#t tbody#search').append('' +
+                            '<tr><td> '+data[i].numEquipe+'</td>' +
+                            '<td> '+data[i].nbreEmp+' </td>' +
+                            '<td>'+data[i].service+' </td>' +
+                            '<td>' +
+                            '<a class="btn btn-dark" href="Equipe/'+data[i].idEquipe+'">show </a>' +
+                            '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/edit">edit </a>' +
+                            '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/AffecterService">Affecter Au Service</a>' +
+                            '</td></tr>');
+                    }
+                },
+
+
+
+        });
+            return false;});
+        $("#iddown").click(function(e) {
+            var value3 ="DESC";
+            $.ajax({
+                url :  "{{ path('DOWNtriEQUIPE') }}",
+                type : 'GET',
+                data: {
+
+                    'order': value3
+                },
+                success : function(data){
+                    $('#t tbody#search').empty();
+
+                    for (i = 0; i < data.length; i++) {
+
+                        $('#t tbody#all').hide();
+                        $('#t tbody#search').append('' +
+                            '<tr><td> '+data[i].numEquipe+'</td>' +
+                            '<td> '+data[i].nbreEmp+' </td>' +
+                            '<td>'+data[i].service+' </td>' +
+                            '<td>' +
+                            '<a class="btn btn-dark" href="Equipe/'+data[i].idEquipe+'">show </a>' +
+                            '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/edit">edit </a>' +
+                            '<a class="btn btn-outline-primary" href="'+data[i].idEquipe+'/AffecterService">Affecter Au Service</a>' +
+                            '</td></tr>');
+                    }
+                },
+
+
+
+            });
+            return false;});
+    </script>
+
+{% endblock %}
+

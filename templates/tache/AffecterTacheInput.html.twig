@@ -1,0 +1,107 @@
+{% extends'Backbase.html.twig' %}
+
+{% block body %}
+
+
+    <div class="card" style="width: 1100px;margin-left: 490px;margin-top: 60px">
+        <div class="card-body">
+            <h5 class="card-title">List des Taches</h5>
+            <!-- Bordered Table -->
+            <table class="table" >
+                <thead>
+                <tr>
+                    <th scope="col">Numéro Tache</th>
+                    <th scope="col">Nom Tache</th>
+                    <th scope="col">Temps Alloué</th>
+                    <th scope="col">Etat Tache</th>
+                    <th scope="col">Importance</th>
+                    <th scope="col">Responsable</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for tache in taches %}
+                    <tr>
+                        <td>{{ tache.numTache }}</td>
+                        <td>{{ tache.nomTache }}</td>
+                        <td>{{ tache.neededTime }}</td>
+                        <td>{{ tache.etatTache }}</td>
+                        <td>{{ tache.importance }}</td>
+                        <td>{{ tache.employee }}</td>
+                        <td>
+                            <a href="{{ path('app_tache_show', {'idTache': tache.idTache}) }}" class="btn btn-dark">Affecter Tache</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="7">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- End Bordered Table -->
+            <h5 class="card-title">List des Employees</h5>
+            <!-- Bordered Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Cin</th>
+                    <th>Photo</th>
+                    <th>EquipeId</th>
+                    <th>ServiceId</th>
+                    <th>Role</th>
+                    <th>MotDePasse</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.id }}</td>
+                        <td>{{ employee.nom }}</td>
+                        <td>{{ employee.prenom }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.cin }}</td>
+                        <td>{{ employee.photo }}</td>
+                        <td>{{ employee.equipeId }}</td>
+                        <td>{{ employee.serviceId }}</td>
+                        <td>{{ employee.role }}</td>
+                        <td>{{ employee.motDePasse }}</td>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+
+            {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Numero Tache</label>
+                <div class="col-sm-10">
+                    {{ form_widget(form.numTache,{'attr':{'class':'d-none'}})}} <input class="form-control" disabled="disabled" value={{ tache.numTache }}>{# { 'attr':{'disabled':'disabled'} } #}
+                    {{ form_errors(form.numTache,{'attr':{'class':'text-danger'}})}}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Nom Employee</label>
+                <div class="col-sm-10">
+                    {{ form_widget(form.employee,{'attr':{'class':'form-control'}})}}
+                    {{ form_errors(form.employee,{'attr':{'class':'text-danger'}})}}
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-primary" style="margin-left: 720px;margin-top: 10px">{{ button_label|default('Affecter tache') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

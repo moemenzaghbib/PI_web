@@ -1,0 +1,86 @@
+
+{% block body %}
+
+    <h1 align="center" style="color:green;">E-Citoyen</h1>
+
+    <hr>
+    <div class="content" >
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-1">
+                    <div class="card-deck">
+                        <div class="card-header card-header-primary">
+                            <h1 align="center" style="color:blue;">Les Taches</h1>
+
+                        </div>
+                        <!DOCTYPE html>
+                        <html>
+                        <head>
+                            <style>
+                                #customers {
+                                    font-family: Arial, Helvetica, sans-serif;
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                }
+
+                                #customers td, #customers th {
+                                    border: 1px solid #ddd;
+                                    padding: 8px;
+                                }
+
+                                #customers tr:nth-child(even) {
+                                    background-color: #f2f2f2;
+                                }
+
+                                #customers tr:hover {
+                                    background-color: #ddd;
+                                }
+
+                                #customers th {
+                                    padding-top: 12px;
+                                    padding-bottom: 12px;
+                                    text-align: left;
+                                    background-color: royalblue;
+                                    color: white;
+                                }
+                            </style>
+                        </head>
+                        </html>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <table  border="1px" class="table-table table-striped" style="margin-left: 150px">
+        <thead>
+        <tr>
+            <th scope="col">Numéro Tache</th>
+            <th scope="col">Nom Tache</th>
+            <th scope="col">Temps Alloué</th>
+            <th scope="col">Etat Tache</th>
+            <th scope="col">Importance</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        {% for tache in Taches %}
+            <tr>
+                <td>{{ tache.numTache }}</td>
+                <td>{{ tache.nomTache }}</td>
+                <td>{{ tache.neededTime }}</td>
+                <td>{{ tache.etatTache }}</td>
+                <td>{{ tache.importance }}</td>
+
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="7">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+
+{% endblock %}

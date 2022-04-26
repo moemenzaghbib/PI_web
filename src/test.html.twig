@@ -1,0 +1,229 @@
+{% extends 'baseBack.html.twig' %}
+
+
+
+{% block body %}
+    <h1 style="margin: 15px">Reclamation Back </h1>
+    <div id="divs">
+        <form  class="align-content-center" method="get" style="align-items: center">
+            <input type="text" id="search" placeholder="recherche par Nom 🔍">
+            <a class="tg-btn" href="" id="idup">Numero (UP) ⬆️</a>
+            <a class="tg-btn" href="" id="iddown">Numero (DOWN) ⬇️</a>
+        </form>
+    </div>
+    <table id="t" class="table">
+        <thead>
+        <tr>
+
+            <th>Nom</th>
+            <th>Prenom</th>
+            <th>Email</th>
+            <th>Commentaire</th>
+            <th>Datereclamation</th>
+            <th>Typereclamation</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody id="all">
+        {% for reclamation in reclamations %}
+            <tr>
+
+                <td>{{ reclamation.nom }}</td>
+                <td>{{ reclamation.prenom }}</td>
+                <td>{{ reclamation.email }}</td>
+                <td>{{ reclamation.commentaire |raw}}</td>
+                <td>{{ reclamation.datereclamation ? reclamation.datereclamation|date('Y-m-d') : '' }}</td>
+                <td>{{ reclamation.typereclamation }}</td>
+                <td>
+                    <a href="{{ path('app_reclamation_back_show', {'numero': reclamation.numero}) }}"class="btn btn-primary " >show</a>
+                </td>
+            </tr>
+
+
+            </td>
+            </tr>
+
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+
+
+        </tbody>
+
+
+        <tbody id="search">
+
+        </tbody>
+
+    </table>
+
+
+
+    <div class="text-center">
+        <a type="submit" class="btn btn-primary btn-sm " style="margin-bottom: 20px"  href="{{ path('impr' )}}">  <strong>enregistrer sous forme pdf</strong></a>
+    </div>
+
+    <div class="text-center">
+
+
+        <a type="submit" class="btn btn-primary btn-sm "  style="text-align: center" style="margin:auto " href="{{ path('tri' )}}">  <strong>Tri</strong></a>
+        </form>
+    </div></div>
+    <a  type="submit" class="btn btn-primary " href="{{ path('app_reclamation_back_index') }}"  style="margin-bottom: 20px" class="btn btn-primary btn-sm " >back to list</a>
+    <form class="align-content-center" action="{{ path("search_back") }}" method="get" style="align-items: center">
+
+
+    </form>
+    </div>
+
+    <script
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </script>
+    <script>
+        $( document ).ready(function() {
+
+            /*begin rechercher avancee multicritéres selon nom et lieux*/
+            $("#divs").keyup(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                if(value.length >= 1 || value.length == 0  )
+                {
+
+                    //    alert(value);
+                    /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                    $.ajax({
+                        /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                        url : "{{ path('search_event') }}",
+                        /* La méthode utilisée pour transférer les données est GET */
+                        type : 'GET',
+                        /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                        data: {
+                            'searchValue' : value
+                        },
+                        /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                        success : function(retour){
+                            if(retour){
+                                $('#t tbody#search').empty();
+                                $.each(JSON.parse(retour), function(i, obj) {
+                                    $('#t tbody#all').hide();
+                                    $('#t tbody#search').append('' +
+                                        '<tr><td> '+obj.numero+' </td>' +
+                                        '<td> '+obj.nom+' </td>' +
+                                        '<td>'+obj.prenom+' </td>' +
+                                        '<td>'+obj.email+' </td>' +
+                                        '<td>'+obj.datereclamation+' </td>' +
+                                        '<td>'+obj.typereclamation+' </td>  </tr>');
+                                });
+                            }
+                            else
+                            {
+
+                                $('#t tbody#all').show();
+                                $('#t tbody#search').empty();
+                                $('#t tbody#search').fadeIn('fast');
+
+                            }
+                        },
+                    });
+                    return false;  }
+            });
+            /*begin trie up selon numero*/
+            $("#idup").click(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+                var value = $("#search").val();
+                var value3 ="ASC";
+
+                //    alert(value);
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                    url : "{{ path('search_back') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value,
+                        'orderid': value3
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                    success : function(retour){
+                        if(retour){
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(retour), function(i, obj) {
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('' +
+                                    '<tr><td> '+obj.numero+' </td>' +
+                                    '<td> '+obj.nom+' </td>' +
+                                    '<td>'+obj.prenom+' </td>' +
+                                    '<td>'+obj.email+' </td>' +
+                                    '<td>'+obj.datereclamation+' </td>' +
+                                    '<td>'+obj.typereclamation+' </td>   </tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+            });
+        });
+        /*end trie up selon id*/
+
+        /*begin trie down selon id*/
+        $("#iddown").click(function(e){
+            /* La variable value va prendre la valeur insérer dans le champ de texte afin d’effectuer la recherche */
+            var value = $("#search").val();
+            var value3 ="DESC";
+
+            //    alert(value);
+            /* Ajax est lancé lors du remplissage du champ texte dont l’id est « search » pour faire la recherche */
+            $.ajax({
+                /* l’url est une chaine de caractères contenant l’adresse où la requête est envoyée */
+                url : "{{ path('search_back') }}",
+                /* La méthode utilisée pour transférer les données est GET */
+                type : 'GET',
+                /*Ici search value va prendre la chaine entrée par un utilisateur dans la zone de recherche et sera placée après l’url */
+                data: {
+                    'searchValue' : value,
+                    'orderid': value3
+                },
+                /*Cette fonction permet de vider le contenu du tableau pour recevoir le nouveau contenu*/
+                success : function(retour){
+                    if(retour){
+                        $('#t tbody#search').empty();
+                        $.each(JSON.parse(retour), function(i, obj) {
+                            $('#t tbody#all').hide();
+                            $('#t tbody#search').append('' +
+                                '<tr><td> '+obj.numero+' </td>' +
+                                '<td> '+obj.nom+' </td>' +
+                                '<td>'+obj.prenom+' </td>' +
+                                '<td>'+obj.email+' </td>' +
+                                '<td>'+obj.datereclamation+' </td>' +
+                                '<td>'+obj.typereclamation+' </td></tr>');
+                        });
+                    }
+                    else
+
+                    {
+                        $('#t tbody#all').show();
+                        $('#t tbody#search').empty();
+                        $('#t tbody#search').fadeIn('fast');
+                    }
+                },
+            });
+            return false;
+
+
+        });
+        /*end trie down selon id*/
+
+    </script>
+{% endblock %}
+
+

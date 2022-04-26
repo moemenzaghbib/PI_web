@@ -1,0 +1,8 @@
+{% extends 'Backbase.html.twig' %}
+{% block body %}
+<form method="post" action="{{ path('app_equipe_delete', {'idEquipe': equipe.idEquipe}) }}"
+      onsubmit="return confirm('Are you sure you want to delete this item?');" xmlns="http://www.w3.org/1999/html">
+    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ equipe.idEquipe) }}">
+    <button style="margin-left: 900px" class="btn btn-primary">Delete</button>
+</form>
+{% endblock %}

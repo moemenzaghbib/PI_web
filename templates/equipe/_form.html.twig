@@ -1,0 +1,58 @@
+{# {{ form_start(form) }}
+    {{ form_widget(form) }}
+    <button class="btn">{{ button_label|default('Save') }}</button>
+{{ form_end(form) }}
+#}
+{#  #}
+
+{% block body %}
+
+    <div style="display: flex;align-items: center;justify-content: center;margin-top: 100px;margin-left: 300px">
+
+        <div class="card" style="width: 700px;height: 350px;">
+            <div class="card-body">
+                <h5 class="card-title">Ajouter/Editer Equipe</h5>
+
+                <!-- General Form Elements -->
+                {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+                    <div class="row mb-3">
+                        <label for="inputText" class="col-sm-2 col-form-label">Numero Equipe</label>
+                        <div class="col-sm-10">
+                            {{ form_widget(form.numEquipe,{'attr':{'class':'form-control'}})}}
+                            {{ form_errors(form.numEquipe,{'attr':{'class':'form-control'}})}}
+                        </div>
+                    </div>
+                <div class="row mb-3">
+                    <label for="inputText" class="col-sm-2 col-form-label">Nombre Employee</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.nbreEmp,{'attr':{'class':'form-control'}})}}
+                        {{ form_errors(form.nbreEmp,{'attr':{'class':'form-control'}})}}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <label for="inputText" class="col-sm-2 col-form-label">Nom du Service</label>
+                    <div class="col-sm-10">
+                        {{ form_widget(form.service,{'attr':{'class':'form-control'}})}}
+                        {{ form_errors(form.service,{'attr':{'class':'form-control'}})}}
+
+                    </div>
+                </div>
+                    <div class="row mb-3" style="margin-left: 250px">
+
+                        <div class="col-sm-10">
+                            <button type="submit" class="btn btn-primary">{{ button_label|default('Save') }}</button>
+
+                            <button type="reset" class="btn btn-primary">Reset</button>
+                            <a href="{{ path('app_equipe_index') }}"  class="btn btn-primary">back to list</a>
+
+                        </div>
+                    </div>
+
+            {{form_end(form)}}<!-- End General Form Elements -->
+
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,138 @@
+{% extends 'Backbase.html.twig' %}
+{% block body %}
+   {# <h1>Equipe index</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>IdEquipe</th>
+                <th>NumEquipe</th>
+                <th>NbreEmp</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for equipe in equipes %}
+            <tr>
+                <td>{{ equipe.idEquipe }}</td>
+                <td>{{ equipe.numEquipe }}</td>
+                <td>{{ equipe.nbreEmp }}</td>
+                <td>
+                    <a href="{{ path('app_equipe_show', {'idEquipe': equipe.idEquipe}) }}">show</a>
+                    <a href="{{ path('app_equipe_edit', {'idEquipe': equipe.idEquipe}) }}">edit</a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_equipe_new') }}">Create new</a> #}
+
+    <div class="card" style="margin-top: 50px">
+        <div class="card-body" style="width: 999px;position: center;align-self: center">
+            <h1 class="card-title" style="margin-left: 150px;margin-top: 30px">List des Taches</h1>
+
+           <div>
+               <input style="margin-left: 150px" type="text" id="search" class="form-control" placeholder="Search par Numero">
+           </div>
+
+            <table class="table" style="margin-left: 150px" id="t">
+                <thead>
+                <tr>
+                    <th scope="col">Numero Equipe</th>
+                    <th scope="col">Nombre d'employees Equipe</th>
+                    <th scope="col">Nom Service Equipe</th>
+                </tr>
+                </thead>
+                <tbody id="all">
+                {% for equipe in equipes %}
+                <tr>
+                    <td>{{ equipe.numEquipe }}</td>
+                    <td>{{ equipe.nbreEmp }}</td>
+                    <td>{{ equipe.service }}</td>
+                    <td>
+                        <a href="{{ path('app_equipe_show', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-dark">show</a>
+                        <a href="{{ path('app_equipe_edit', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-outline-primary">edit</a>
+                        <a href="{{ path('app_service_equipe_edit', {'idEquipe': equipe.idEquipe}) }}" class="btn btn-outline-primary">Affecter Au Service</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="4">no records found</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+                </tbody>
+                <tbody id="search">
+                </tbody>
+            </table>
+            </table>
+            <!-- End Default Table Example -->
+
+            </div><a style="margin-left: 850px;margin-bottom: 30px" href="{{ path('app_equipe_new') }}"><button type="submit" class="btn btn-primary">Create new</button></a>
+
+             </div>
+            {{ knp_pagination_render(equipes) }}
+
+
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+    <script>
+        $( document ).ready(function() {
+            $("#search").keyup(function(e){
+                /* La variable value va prendre la valeur insérer dans le champ de texte
+                afin d’effectuer la recherche */
+                var value = $(this).val();
+                /* Ajax est lancé lors du remplissage du champ texte dont l’id est
+                « search » pour faire la recherche */
+                $.ajax({
+                    /* l’url est une chaine de caractères contenant l’adresse où la requête est
+                    envoyée */
+                    url : "{{ path('rechercheEquipe') }}",
+                    /* La méthode utilisée pour transférer les données est GET */
+                    type : 'GET',
+                    /*Ici search value va prendre la chaine entrée par un utilisateur dans la
+                    zone de recherche et sera placée après l’url */
+                    data: {
+                        'searchValue' : value
+                    },
+                    /*Cette fonction permet de vider le contenu du tableau pour recevoir le
+                    nouveau contenu*/
+                    success : function(data){
+                        if(data){
+
+                            $('#t tbody#search').empty();
+                            $.each(JSON.parse(data), function(i, obj) {
+
+                                $('#t tbody#all').hide();
+                                $('#t tbody#search').append('' +
+                                    '<tr><td> '+obj.numEquipe+'</td>' +
+                                    '<td> '+obj.nbreEmp+' </td>' +
+                                    '<td>'+obj.service+' </td>' +
+                                    '<td>' +
+                                    '<ahref="Equipe/'+obj.idEquipe+'">show</a> </br>' +
+                                    '<ahref="'+obj.idEquipe+'/edit">edit</a>' +
+                                    '<ahref="'+obj.idEquipe+'/AffecterService">Affecter Au Service</a>' +
+                                    '</td></tr>');
+                            });
+                        }
+                        else
+                        {
+                            $('#t tbody#all').show();
+                            $('#t tbody#search').empty();
+                            $('#t tbody#search').fadeIn('fast');
+                        }
+                    },
+                });
+                return false;
+            });
+        });
+    </script>
+
+            {% endblock %}
+

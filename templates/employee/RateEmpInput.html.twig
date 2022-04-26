@@ -1,0 +1,207 @@
+{% extends'Backbase.html.twig' %}
+
+{% block body %}
+
+
+
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+
+
+    <div class="card" style="width: 1300px;margin-left: 400px;margin-top: 100px">
+        <div class="card-body">
+            <h5 class="card-title">List des Employees</h5>
+            <!-- Bordered Table -->
+
+
+            <table id ="t" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Cin</th>
+                    <th>Evaluation</th>
+                    <th>Photo</th>
+                    <th>EquipeId</th>
+                    <th>ServiceId</th>
+                    <th>Role</th>
+                    <th>MotDePasse</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody id="show">
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.id }}</td>
+                        <td>{{ employee.nom }}</td>
+                        <td>{{ employee.prenom }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.cin }}</td>
+                        <td>{{ employee.Rating }}</td>
+                        <td>{{ employee.photo }}</td>
+                        <td>{{ employee.equipeId }}</td>
+                        <td>{{ employee.serviceId }}</td>
+                        <td>{{ employee.role }}</td>
+                        <td>{{ employee.motDePasse }}</td>
+                        <td><a  class="btn btn-outline-primary" href="{{ path('app_rate_Input_emp',{'id': employee.id})}}">Evaluer</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">ID Employee</label>
+                <div class="col-sm-10">
+                    <input  type="text" disabled="disabled" id="id_emp" class="form-control" value="{{emp.id}}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Nom Employee</label>
+                <div class="col-sm-10">
+                    <input disabled="disabled" class="form-control" value="{{emp.nom}}">
+                </div>
+            </div>
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Prenom Employee</label>
+                <div class="col-sm-10">
+                    <input disabled="disabled" class="form-control" value="{{emp.prenom}}">
+                </div>
+            </div>
+
+                <label for="inputText" class="col-sm-2 col-form-label">Evaluation</label>
+
+            <div class="stars">
+                <i class="lar la-star" data-value="1">
+
+                </i><i class="lar la-star" data-value="2">
+
+                </i><i class="lar la-star" data-value="3">
+
+                </i><i class="lar la-star" data-value="4">
+
+                </i><i class="lar la-star" data-value="5"></i>
+            </div>
+
+
+
+
+        </div>
+    </div>
+    <script
+            src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js">
+    </script>
+
+    <script>
+
+
+        window.onload = () => {
+            // On va chercher toutes les étoiles
+            const stars = document.querySelectorAll(".la-star");
+
+            // On va chercher l'input
+            const note = document.querySelector("#note");
+
+            // On boucle sur les étoiles pour le ajouter des écouteurs d'évènements
+            for(star of stars){
+                // On écoute le survol
+                star.addEventListener("mouseover", function(){
+                    resetStars();
+                    this.style.color = "red";
+                    this.classList.add("las");
+                    this.classList.remove("lar");
+                    // L'élément précédent dans le DOM (de même niveau, balise soeur)
+                    let previousStar = this.previousElementSibling;
+
+                    while(previousStar){
+                        // On passe l'étoile qui précède en rouge
+                        previousStar.style.color = "red";
+                        previousStar.classList.add("las");
+                        previousStar.classList.remove("lar");
+                        // On récupère l'étoile qui la précède
+                        previousStar = previousStar.previousElementSibling;
+                    }
+                });
+
+                // On écoute le clic
+
+                star.addEventListener("click", function(){
+                    //note.value = this.dataset.value;
+                    var x = this.dataset.value;
+                    var idd = document.getElementById("id_emp").value;
+                    // $("#test").html("");
+                    //var e = $("<input  id='testtest'" + "value=" + this.dataset.value+">");
+                    //$("#test").append(e);
+                    $.ajax({
+                        url : "{{ path('UJSON') }}",
+                        method: "POST",
+                        data: {
+                            idd:idd,
+                            x:x,
+
+                        },
+                        success: function (data) {
+                            alert("Evaluation du l'employee ayant ID: "+idd+" est modifié avec succès");
+                            $('#t tbody#show').empty();
+                            for (i = 0; i < data.length; i++) {
+
+
+                                $('#t tbody#show').append('' +
+                                    '<tr><td> '+data[i].id+'</td>' +
+                                    '<td> '+data[i].nom+' </td>' +
+                                    '<td>'+data[i].prenom+' </td>' +
+                                    '<td>'+data[i].email+' </td>' +
+                                    '<td>'+data[i].cin+' </td>' +
+                                    '<td>'+data[i].Rating+' </td>' +
+                                    '<td>'+data[i].photo+' </td>' +
+                                    '<td>'+data[i].EquipeId+' </td>' +
+                                    '<td>'+data[i].ServiceId+' </td>' +
+                                    '<td>'+data[i].motDePasse+ '<td>' + '</td>' +
+                                    '<td>'+'<a class="btn btn-outline-primary" href="'+data[i].id+'">Evaluer</a>'+'</td>'+'</tr>');
+                            }
+
+                        }});
+
+
+
+
+
+
+
+
+
+
+                });
+
+                star.addEventListener("mouseout", function(){
+                    resetStars(note.value);
+                });
+            }
+
+            /**
+             * Reset des étoiles en vérifiant la note dans l'input caché
+             * @param {number} note
+             */
+            function resetStars(note = 0){
+                for(star of stars){
+                    if(star.dataset.value > note){
+                        star.style.color = "black";
+                        star.classList.add("lar");
+                        star.classList.remove("las");
+                    }else{
+                        star.style.color = "red";
+                        star.classList.add("las");
+                        star.classList.remove("lar");
+                    }
+                }
+            }
+        }
+    </script>
+
+{% endblock %}
+

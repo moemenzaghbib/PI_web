@@ -1,0 +1,83 @@
+{% extends'Backbase.html.twig' %}
+
+{% block body %}
+    <h1>Service index</h1>
+
+
+
+    <div class="card" style="width: 1300px;margin-left: 490px;margin-top: 60px">
+        <div class="card-body">
+            <h5 class="card-title">List des Equipe</h5>
+            <!-- Bordered Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr><th scope="col">Id Equipe</th>
+                    <th scope="col">Numero Equipe</th>
+                    <th scope="col">Nombre d'employees Equipe</th>
+                    <th scope="col">Nom Service Equipe</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipe in equipes %}
+                    <tr><td>{{ equipe.idEquipe }}</td>
+                        <td>{{ equipe.numEquipe }}</td>
+                        <td>{{ equipe.nbreEmp }}</td>
+                        <td>{{ equipe.service }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- End Bordered Table -->
+            <h5 class="card-title">List des Employees</h5>
+            <!-- Bordered Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Email</th>
+                    <th>Cin</th>
+                    <th>Photo</th>
+                    <th>EquipeId</th>
+                    <th>ServiceId</th>
+                    <th>Role</th>
+                    <th>MotDePasse</th>
+                    <th>Actions</th>
+                               </tr>
+                </thead>
+                <tbody>
+                {% for employee in employees %}
+                    <tr>
+                        <td>{{ employee.id }}</td>
+                        <td>{{ employee.nom }}</td>
+                        <td>{{ employee.prenom }}</td>
+                        <td>{{ employee.email }}</td>
+                        <td>{{ employee.cin }}</td>
+                        <td>{{ employee.photo }}</td>
+                        <td>{{ employee.equipeId }}</td>
+                        <td>{{ employee.serviceId }}</td>
+                        <td>{{ employee.role }}</td>
+                        <td>{{ employee.motDePasse }}</td>
+                        <td><a href="{{ path('app_emp_ID_equipe',{'id': employee.id}) }}">Ajouter a une equipe</a>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+{% endblock %}

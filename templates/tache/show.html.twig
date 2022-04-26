@@ -1,0 +1,40 @@
+{% extends 'Backbase.html.twig' %}
+{% block body %}
+    <h1>Tache</h1>
+
+    <table class="table" style="margin-left: 500px;margin-top: 200px;width: 800px">
+        <tbody>
+            <tr>
+                <th>Id Tache</th>
+                <td>{{ tache.idTache }}</td>
+            </tr>
+            <tr>
+                <th>Numero Tache</th>
+                <td>{{ tache.numTache }}</td>
+            </tr>
+            <tr>
+                <th>Nom Tache</th>
+                <td>{{ tache.nomTache }}</td>
+            </tr>
+            <tr>
+                <th>Temps Aloué du Tache</th>
+                <td>{{ tache.neededTime }}</td>
+            </tr>
+            <tr>
+                <th>Etat Tache</th>
+                <td>{{ tache.etatTache }}</td>
+            </tr>
+            <tr>
+                <th>Importance Tache</th>
+                <td>{{ tache.importance }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="margin-left: 800px"> <a href="{{ path('app1')  }}"  class="btn btn-primary"  >back to list</a>
+
+        <a href="{{ path('app_tache_edit', {'idTache': tache.idTache}) }}" class="btn btn-primary">edit</a>
+        {{ include('tache/_delete_form.html.twig') }}
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends'Backbase.html.twig' %}
+
+{% block body %}
+    <h1>Service index</h1>
+
+    
+
+    <div class="card" style="width: 700px;margin-left: 530px;margin-top: 60px">
+        <div class="card-body">
+            <h5 class="card-title">List des Equipe</h5>
+                       <!-- Bordered Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr><th scope="col">Id Equipe</th>
+                    <th scope="col">Numero Equipe</th>
+                    <th scope="col">Nombre d'employees Equipe</th>
+                    <th scope="col">Nom Service Equipe</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for equipe in equipes %}
+                    <tr><td>{{ equipe.idEquipe }}</td>
+                        <td>{{ equipe.numEquipe }}</td>
+                        <td>{{ equipe.nbreEmp }}</td>
+                        <td>{{ equipe.service }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- End Bordered Table -->
+            <h5 class="card-title">List des Services</h5>
+            <!-- Bordered Table -->
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>ID Service</th>
+                    <th>Nom Service</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for Service in services %}
+                    <tr>
+                        <td>{{ Service.id }}</td>
+                        <td>{{ Service.nomservice }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="11">no records found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            <!-- End Bordered Table -->
+            {{ form_start(form,{attr:{novalidate:'novalidate'}}) }}
+            <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Numero Equipe</label>
+                <div disabled="disabled" class="col-sm-10">
+                    {{ form_widget(form.numEquipe,{'attr':{'class':'d-none'}})}}<input class="form-control" disabled="disabled" value="{{ e.numEquipe }}">
+                    {{ form_errors(form.numEquipe,{'attr':{'class':'form-control'}})}}
+                </div>
+            </div>
+           <div class="row mb-3">
+                <label for="inputText" class="col-sm-2 col-form-label">Nom du Service</label>
+                <div class="col-sm-10">
+                    {{ form_widget(form.service,{'attr':{'class':'form-control'}})}}
+                    {{ form_errors(form.service,{'attr':{'class':'form-control'}})}}
+                </div>
+            </div>
+            <div class="row mb-3" style="margin-left: 250px">
+
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">{{ button_label|default('Affecter') }}</button>
+                </div>
+            </div>
+
+            {{form_end(form)}}<!-- End General Form Elements -->
+        </div>
+    </div>
+
+
+
+
+{% endblock %}
